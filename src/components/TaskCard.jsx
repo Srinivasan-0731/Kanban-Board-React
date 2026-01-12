@@ -1,14 +1,18 @@
 import { useDraggable } from "@dnd-kit/core";
 import { useTasks } from "../context/TaskContext";
 import { CSS } from "@dnd-kit/utilities"
-import { useState } from "react";
+
 
 
 
 const TaskCard = ({ task, columnId }) => {
-    const { removeTask, editTask } = useTasks();
+    const { removeTask } = useTasks();
 
-
+     const colors = {
+        high: "bg-red-500",
+        medium: "bg-yellow-500",
+        low: "bg-green-500",
+     };
 
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: `${columnId}-${task.id}`,
@@ -27,12 +31,20 @@ const TaskCard = ({ task, columnId }) => {
         <div ref={setNodeRef}
             {...attributes}
             {...listeners}
-            className="bg-zinc-600 p-3 mb-3 text-white rounded cursor-move ml-20 flex justify-between"
+            className="bg-zinc-500 p-3 mb-3 text-white rounded cursor-move ml-20  flex justify-between"
             style={style}
         >
 
             <>
-                <span>{task.content}</span>
+                <div className="flex justify-between items-center">
+                    <span>{task.content}</span>
+
+                    <span className={`text-xs px-2 py-1 rounded text-black ${colors[task.priority]}`}>
+                        {task.priority.toUpperCase()}
+                    </span>
+                </div>
+
+                
 
                 <div className="flex gap-2 ml-3">
                     {/* DELETE */}
@@ -40,7 +52,7 @@ const TaskCard = ({ task, columnId }) => {
                         e.stopPropagation(); e.preventDefault();
                         removeTask(columnId, task.id);
                     }}
-                        className="hover:bg-red-600 cursor-pointer" title="Delete">
+                        className=" text-3xl cursor-pointer text-red-600 font-semibold" title="Delete">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             fill="currentColor" viewBox="0 0 24 24" >
                             --Boxicons v3.0.7 https://boxicons.com | License  https://docs.boxicons.com/free--

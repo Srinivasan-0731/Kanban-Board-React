@@ -11,7 +11,7 @@ const Column = ({ columnId }) => {
     const { setNodeRef } =useDroppable({ id: columnId });
 
     return (
-
+        
         <div ref={setNodeRef}>
             <h2 className=" mb-4 bg-blue-500 p-4 rounded-lg w-64 ml-20 font-bold">{columns[columnId].name}</h2>
 
