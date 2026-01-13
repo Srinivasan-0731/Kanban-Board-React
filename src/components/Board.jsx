@@ -37,11 +37,11 @@ const Board = () => {
         <DndContext onDragEnd={handleDragEnd}>
             <div className="flex gap-6">
 
-                {Object.entries(columns).map(([id, column]) => (
+                {Object.keys(columns).map(columnId => (
                     <Column
-                        key={id}
-                        columnId={id}
-                        column={column}
+                        key={columnId}
+                        columnId={columnId}
+                        column={columnId}
                     />
                 ))}
             </div>

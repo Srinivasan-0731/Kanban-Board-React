@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+body{
+    background-color: #a3fae4;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap');
+
+*{
+    font-family: "Rubik Glitch", system-ui !important;
+}

@@ -5,7 +5,7 @@ const AddTask = () => {
     const { columns, addTask } = useTasks();
     const [text, setText] = useState("");
     const [columnId, setColumnId] = useState("todo");
-    const [priority, setPriority] = useState("");
+    const [priority, setPriority] = useState("high");
 
     const handleAdd = () => {
         if (!text.trim()) return;
@@ -25,23 +25,23 @@ const AddTask = () => {
                 <div className="flex justify-center items-center gap-2 mb-6 pt-20">
                     <input value={text}
                         onChange={e => setText(e.target.value)}
-                        placeholder="New task" className="border p-2 rounded-md"
+                        placeholder="New task" className="border-2 p-2 rounded-md"
                     />
 
-                    <select onChange={(e) => setPriority(e.target.value)} className="border p-2 rounded-md">
+                    <select onChange={(e) => setPriority(e.target.value)} className="border-2 p-2 rounded-md">
                         <option value="high">High</option>
                         <option value="medium">Medium</option>
                         <option value="low">Low</option>
                     </select>
 
-                    <select onChange={e => setColumnId(e.target.value)} className="border p-2 rounded-md">
+                    <select onChange={e => setColumnId(e.target.value)} className="border-2 p-2 rounded-md">
                         {Object.keys(columns).map(column => (
                             <option key={column} value={column}>
                                 {columns[column].name}
                             </option>
                         ))}
                     </select>
-                    <button className="border px-6 py-2 rounded-md bg-blue-500 hover:bg-blue-600 cursor-pointer" onClick={handleAdd}>Add</button>
+                    <button className="border-2 px-6 py-2 rounded-md bg-blue-500 hover:bg-blue-600 cursor-pointer" onClick={handleAdd}>Add</button>
                 </div>
             
         </>
