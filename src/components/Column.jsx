@@ -1,32 +1,26 @@
-import { useState } from "react";
-import { useTasks } from "../context/TaskContext";
 import TaskCard from "./TaskCard";
 import { useDroppable } from "@dnd-kit/core";
 
 
-const Column = ({ columnId }) => {
-    const { columns } = useTasks();
-
-
-    const { setNodeRef } = useDroppable({ id: columnId });
+function Column({  column, tasks, onEdit, onDelete }) {
+    const { setNodeRef } = useDroppable({ id: column.id });
+    
 
     return (
+        <div ref={setNodeRef} className="bg-blue-100 p-4 rounded shadow-xl min-h-[400px]">
+            <h2 className="text-xl font-bold shadow-md bg-amber-300 rounded-xl shadow-black/30 p-2 mb-3">{column.title}</h2>
 
-        
-            <div ref={setNodeRef}>
-                <h2 className=" mb-4 bg-blue-500 p-4 rounded-lg w-64 ml-26 font-bold border-2">{columns[columnId].name}</h2>
+            {tasks.map((task) => (
+                <TaskCard
+                    key={task.id}
+                    task={task}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                />
+            ))}
 
-                {columns[columnId].items.map(task => (
-                    <TaskCard
-                        key={task.id}
-                        task={task}
-                        columnId={columnId} />
-                ))}
-
-
-            </div>
-        
-    );
+        </div>
+    )
 }
 
 export default Column;

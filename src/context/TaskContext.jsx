@@ -1,60 +1,42 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { initialData } from "../data/initialData";
+
 
 const TaskContext = createContext();
 
 export const TaskProvider = ({ children }) => {
-    const [columns, setColumns] = useState(() => {
-        const saved =localStorage.getItem("kanban");
-        return saved ? JSON.parse(saved) : initialData;
+    const [tasks, setTasks] = useState(() => {
+        const saved = localStorage.getItem("tasks");
+        return saved ? JSON.parse(saved) : [];
     });
 
-    
-    useEffect (() => {
-        localStorage.setItem("kanban", JSON.stringify(columns));
-    }, [columns]);
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
 
-    const addTask = (columnId, task) => {
-        setColumns(prev => ({
-            ...prev,
-            [columnId]: {
-                ...prev[columnId],
-                items: [...prev[columnId].items, task],
-            },
-        }));
+    const addTask = (task) => {
+        setTasks((prev) => [...prev, task]);
     };
 
-    const removeTask = (columnId, taskId) => {
-        setColumns(prev => ({
-            ...prev,
-            [columnId]: {
-                ...prev[columnId],
-                items: prev[columnId].items.filter((task) => task.id !== taskId),
-            },
-        }));
+    const updateTask = (updateTask) => {
+        setTasks((prev) =>
+            prev.map((task) => task.id === updateTask.id ? updateTask : task
+            )
+        );
     };
 
-    const editTask = (columnId, taskId, newText) => {
-        setColumns(prev => ({
-            ...prev,
-            [columnId]: {
-                ...prev[columnId],
-                items: prev[columnId].items.map(task => task.id === taskId
-                    ? {...task, text: newText } : task
-                ),
-            },
-        }));
+    const deleteTask = (id) => {
+        setTasks((prev) => prev.filter((task) => task.id !== id));
     };
 
     
 
     return (
-        <TaskContext.Provider value={{ columns, setColumns, addTask, removeTask }}>
+        <TaskContext.Provider
+            value={{ tasks, addTask, updateTask, deleteTask }}>
+
             {children}
         </TaskContext.Provider>
     );
 };
 
-
-
- export const useTasks = () => useContext(TaskContext);
+export const useTasks = () => useContext(TaskContext);

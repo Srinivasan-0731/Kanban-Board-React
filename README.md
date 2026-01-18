@@ -1,45 +1,61 @@
 README
 
 
-#  Kanban Board – React + dnd-kit
+#  Kanban Board – React Project
 
-A simple *Kanban Board application* built using *React, **Context API, and **dnd-kit*.  
-This app allows users to *add, edit, delete, and drag & drop tasks* between columns.
+This is a *Kanban Board application* built using *React, **Context API, and **dnd-kit*.  
+It allows users to *add, edit, delete, and drag tasks* between columns like *To Do, **In Progress, and **Done*.
 
 ---
 
 ##  Features
 
--  Add new tasks
--  Delete tasks instantly
--  Drag & Drop tasks between columns
--  State management using Context API
--  Fast & smooth UI
--  Unique key handling (no React warnings)
+-  Add new task using modal
+-  Edit existing task
+-  Delete task
+-  Priority based color (Low / Medium / High)
+-  Drag and Drop tasks between columns
+-  Data saved using LocalStorage
+-  Smooth UI using Tailwind CSS
 
 ---
 
 ##  Technologies Used
 
-- React (Vite / CRA)
+- React JS
 - Context API
-- dnd-kit (@dnd-kit/core, @dnd-kit/utilities)
-- JavaScript (ES6)
-- CSS / Inline styles
+- dnd-kit (Drag and Drop)
+- Tailwind CSS
+- UUID
+- LocalStorage
 
 ---
-## RemoveTask Reason
 
-- Main reason for the delay in removing a task
+##  How It Works
 
-- You are using dnd-kit.
-- When a task card is draggable:
+1. Click *Add New Task*
+2. Modal opens with:
+   - Title
+   - Description
+   - Priority
+3. Click *Add* → Task appears in *To Do* column
+4. Drag task between columns
+5. Click  to edit task
+6. Click  to delete task
 
-- When you click the mouse →
-- dnd-kit first tries to start the drag event
+---
 
-- Only after that,
-- the button click event gets triggered
+##  Columns
 
-- Because of this, there is a delay when clicking the remove (delete) button.
+- *To Do*
+- *In Progress*
+- *Done*
 
+Each task has a status field which decides the column.
+
+---
+
+##  Installation & Run
+
+npm install
+npm run dev
