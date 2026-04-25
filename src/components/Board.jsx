@@ -1,73 +1,81 @@
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { useTasks } from "../context/TaskContext";
 import Column from "./Column";
 import TaskModal from "./TaskModal";
 import { useState } from "react";
 
 const COLUMNS = [
-    { id: "todo", title: "To Do" },
-    { id: "inprogress", title: "In Progress" },
-    { id: "done", title: "Done" },
+  { id: "todo", title: "To Do" },
+  { id: "inprogress", title: "In Progress" },
+  { id: "done", title: "Done" },
 ];
 
 function Board() {
-    const { tasks, addTask, updateTask, deleteTask } = useTasks();
-    const [selectedTask, setSelectedTask] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const { tasks, addTask, updateTask, deleteTask } = useTasks();
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleDragEnd = (event) => {
-        const { active, over } = event;
-        if (!over) return;
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  );
 
-        ((prev) =>
-            prev.map((task) =>
-                task.id === active.id
-                    ? { ...task, status: over.id }
-                    : task)
-        );
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over) return;
+    const dragged = tasks.find((t) => t.id === active.id);
+    if (dragged && dragged.status !== over.id) {
+      updateTask({ ...dragged, status: over.id });
+    }
+  };
 
+  return (
+    <div>
+      <div style={{ marginBottom: "20px" }}>
+        <button
+          onClick={() => { setSelectedTask(null); setIsModalOpen(true); }}
+          style={{
+            background: "#185FA5",
+            color: "#E6F1FB",
+            border: "none",
+            borderRadius: "8px",
+            padding: "8px 18px",
+            fontSize: "13px",
+            fontWeight: "500",
+            cursor: "pointer",
+          }}
+        >
+          + Add New Task
+        </button>
+      </div>
 
-        const draggedtask = tasks.find((task) => task.id === active.id);
-
-        if (draggedtask && draggedtask.status !== over.id) {
-            updateTask({ ...draggedtask, status: over.id });
-        }
-    };
-
-    return (
-        <div className="p-4">
-            <button onClick={() => { setSelectedTask(null); setIsModalOpen(true); }} className="bg-blue-600 text-white px-2 py-2 rounded mb-4 ml-6">
-                Add New Task
-            </button>
-
-            <DndContext onDragEnd={handleDragEnd}>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center shadow-xl">
-                    {COLUMNS.map((column) => (
-                        <Column
-                            key={column.id}
-                            column={column}
-                            tasks={tasks.filter((task) => task.status === column.id)}
-                            onEdit={(task) => {
-                                setSelectedTask(task);
-                                setIsModalOpen(true);
-                            }}
-                            onDelete={deleteTask} />
-                    ))}
-                </div>
-            </DndContext>
-
-            {isModalOpen && (
-                <TaskModal
-                    task={selectedTask}
-                    addTask={addTask}
-                    updateTask={updateTask}
-                    close={() => setIsModalOpen(false)}
-                />
-            )}
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+          gap: "16px",
+        }}>
+          {COLUMNS.map((col) => (
+            <Column
+              key={col.id}
+              column={col}
+              tasks={tasks.filter((t) => t.status === col.id)}
+              onEdit={(task) => { setSelectedTask(task); setIsModalOpen(true); }}
+              onDelete={deleteTask}
+            />
+          ))}
         </div>
+      </DndContext>
 
-
-    )
+      {isModalOpen && (
+        <TaskModal
+          task={selectedTask}
+          addTask={addTask}
+          updateTask={updateTask}
+          close={() => setIsModalOpen(false)}
+        />
+      )}
+    </div>
+  );
 }
 
 export default Board;

@@ -6,3 +6,8 @@
 *{
     font-family: "Rubik Glitch", system-ui !important;
 }
+
+
+* {
+  box-sizing: border-box;
+}
